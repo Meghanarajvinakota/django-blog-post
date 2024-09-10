@@ -34,6 +34,29 @@
             </div>
         </div>
     </div>
+
+     <!-- Total Likes Display -->
+     <div class="row pt-3">
+        <div class="col-6 d-flex justify-content-around">
+            <strong class="text-secondary">
+                {% if user.is_authenticated %}
+                <form class="d-inline" action="{% url 'post_likes' post.slug %}" method="POST">
+                    {% csrf_token %}
+                    {% if user in post.likes.all %}
+                    <button type="submit" name="post_id" value="{{post.slug}}" class="btn-like"
+                        aria-label="liked heart icon"><i class="fas fa-heart"></i></button>
+                    {% else %}
+                    <button type="submit" name="post_id" value="{{post.slug}}" class="btn-like"
+                        aria-label="un-liked heart icon"><i class="far fa-heart"></i></button>
+                    {% endif %}
+                </form>
+                {% else %}
+                <span class="text-secondary"><i class="far fa-heart"></i></span>
+                {% endif %}
+                {{ post.likes_count }}
+            </strong>
+        </div>
+
     <!-- Displaying count of comments -->
     <div class="row">
         <div class="col-12">

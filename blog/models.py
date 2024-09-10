@@ -17,12 +17,17 @@ class Post(models.Model):
     status = models.IntegerField(choices=STATUS, default=0)
     excerpt = models.TextField(blank=True)
     updated_on = models.DateTimeField(auto_now=True)
+    likes = models.ManyToManyField(
+        User, blank=True, related_name='recipe_likes',)
 
     class Meta:
         ordering = ["-created_on"]
 
     def __str__(self):
         return f"{self.title} | written by {self.author}"
+    
+    def likes_count(self):
+        return self.likes.count()
 
 
 class Comment(models.Model):
@@ -39,3 +44,21 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment {self.body} by {self.author}"
+
+LIKE_OPTIONS = [
+    ('Like', 'Like'),
+    ('Dislike', 'Dislike'),
+]
+
+class PostLikes(models.Model):
+    """
+    Stores a like entry related to :model:`auth.User`
+    and :model:`blog.post`.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post_likes = models.ForeignKey(Post, on_delete=models.CASCADE)
+    value = models.CharField(choices=LIKE_OPTIONS, default='Like',
+                             max_length=10)
+
+    def __str__(self):
+        return str(self.post_likes)
