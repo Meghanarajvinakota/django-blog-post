@@ -90,6 +90,9 @@ body {
     transform: skew(15deg);
     z-index: 100;
 }
+.profile-image{
+    width:75%;
+}
 
 .post-link {
     text-decoration: none;
@@ -158,4 +161,8 @@ body {
 
 .approval {
     color: rgb(222, 146, 168);
+}
+
+.display {
+    align-items: center;
 }

@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'blog',
     'about',
+    'share',
 ]
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'

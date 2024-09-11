@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <!-- Share a book form -->
+    
+        <div class="col-12 mt-3">
+                
+        <div class="row">
+            <div class="card-body">
+                
+                <h3 class="shared-text">Get involved:</h3>
+                <br>
+                <p>If you know any books with amazing content  we would love to hear from you. </p>
+                <br>
+                <p>Fill out the information below and then check out what others have shared!!</p>
+                <p>Posting as: {{ user.username }}</p>
+                <form id="shareForm" method="post" style="margin-top: 1.3em;" enctype="multipart/form-data">
+                    {{ share_a_book_form | crispy }}
+                    {% csrf_token %}
+                    <button id="submitButton" type="submit" class="btn btn-signup btn-lg">Submit</button>
+                </form>
+                
+            </div>
+        </div>
+
+          <!-- Books users have shared -->
+
+        <div id="shared" class="col-12 mt-3 left">
+            <p class="home-text">Shared Books</p>
+            <div class="row">
+                {% for share in shared %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="image-container">
+                                
+                        <div id="share{{share.id}}" class="share-book shared-details-text text-center">
+                            <div>
+                                <img class="share-img " src="{{ share.picture.url }}" alt=" Image">
+                            </div>
+                                <h4> {{share.title}}</h4>
+                                <br>
+                                <h4>Written by: {{share.author}}</h4>
+                                <br>
+                                <h4>Shared by: {{share.name}}</h4>
+                                {% if user.is_authenticated and share.name == user.username %}
+                                <button class="btn btn-delete" data-share_id="{{ share.id }}">Delete</button>
+                                <button class="btn btn-edit" data-share_id="{{ share.id }}">Edit</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if forloop.counter|divisibleby:3 %}
+            </div>
+            <div class="row">
+                {% endif %}
+            </div>
+        </div>
+        <!-- Delete confirmation modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete book?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete yourbook? This action cannot be undone.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a id="deleteConfirm" href="{% url 'share' %}" class="btn btn-danger">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+{% endblock content %}
+
+{% block extras %}
+<script src="{% static 'js/share.js' %}"></script>
+{% endblock %}

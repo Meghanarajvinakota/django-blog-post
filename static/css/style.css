@@ -162,3 +162,7 @@ body {
 .approval {
     color: rgb(222, 146, 168);
 }
+
+.display {
+    align-items: center;
+}
